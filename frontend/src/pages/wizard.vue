@@ -8,78 +8,82 @@
         sm="12"
         md="12"
         xl="8">
-        <v-stepper v-model="wizardStage" class="transparent-background">
-          <v-stepper-header>
-            <v-stepper-item
+        <VStepper
+          v-model="wizardStage"
+          class="transparent-background">
+          <VStepperHeader>
+            <VStepperItem
               :complete="wizardStage > 1"
               value="1"
               :editable="maxWizardStage > 0">
               {{ t('languageLocale') }}
-            </v-stepper-item>
+            </VStepperItem>
 
-            <v-divider />
+            <VDivider />
 
-            <v-stepper-item
+            <VStepperItem
               :complete="wizardStage > 2"
               value="2"
               :editable="maxWizardStage > 1">
               {{ t('administratorAccount') }}
-            </v-stepper-item>
+            </VStepperItem>
 
-            <v-divider />
+            <VDivider />
 
-            <v-stepper-item
+            <VStepperItem
               :complete="wizardStage > 3"
               value="3"
               :editable="maxWizardStage > 2">
               {{ t('preferredMetadataLanguage') }}
-            </v-stepper-item>
+            </VStepperItem>
 
-            <v-divider />
+            <VDivider />
 
-            <v-stepper-item
+            <VStepperItem
               :complete="wizardStage > 4"
               value="4"
               :editable="maxWizardStage > 3">
               {{ t('remoteAccess') }}
-            </v-stepper-item>
-          </v-stepper-header>
+            </VStepperItem>
+          </VStepperHeader>
 
-          <v-stepper-window>
-            <v-stepper-window-item 
+          <VStepperWindow>
+            <VStepperWindowItem
               key="1-content"
               value="1">
-              <wizard-language class="pt-4" @step-complete="nextStep" />
-            </v-stepper-window-item>
+              <WizardLanguage
+                class="pt-4"
+                @step-complete="nextStep" />
+            </VStepperWindowItem>
 
-            <v-stepper-window-item 
+            <VStepperWindowItem
               key="2-content"
               value="2">
-              <wizard-admin-account
+              <WizardAdminAccount
                 class="pt-4"
                 @step-complete="nextStep"
                 @previous-step="previousStep" />
-            </v-stepper-window-item>
+            </VStepperWindowItem>
 
-            <v-stepper-window-item 
+            <VStepperWindowItem
               key="3-content"
               value="3">
-              <wizard-metadata
+              <WizardMetadata
                 class="pt-4"
                 @step-complete="nextStep"
                 @previous-step="previousStep" />
-            </v-stepper-window-item>
+            </VStepperWindowItem>
 
-            <v-stepper-window-item 
+            <VStepperWindowItem
               key="4-content"
               value="4">
-              <wizard-remote-access
+              <WizardRemoteAccess
                 class="pt-4"
                 @step-complete="nextStep"
                 @previous-step="previousStep" />
-            </v-stepper-window-item>
-          </v-stepper-window>
-        </v-stepper>
+            </VStepperWindowItem>
+          </VStepperWindow>
+        </VStepper>
       </VCol>
     </VRow>
   </VContainer>
@@ -93,7 +97,7 @@ meta:
 
 <script setup lang="ts">
 import { getStartupApi } from '@jellyfin/sdk/lib/utils/api/startup-api';
-import { computed, ref } from 'vue';
+import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 import { useSnackbar } from '@/composables/use-snackbar';
@@ -104,25 +108,6 @@ const router = useRouter();
 
 const wizardStage = ref(1);
 const maxWizardStage = ref(1);
-
-const heading = computed(() => {
-  switch (wizardStage.value) {
-    case 1: {
-      return t('languageLocale');
-    }
-    case 2: {
-      return t('administratorAccount');
-    }
-    case 3: {
-      return t('preferredMetadataLanguage');
-    }
-    case 4: {
-      return t('remoteAccess');
-    }
-  }
-
-  return '';
-});
 
 /**
  * Completes server setup
